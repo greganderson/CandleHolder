@@ -18,5 +18,10 @@ difference() {
 	translate([-7, 47, 12]) {
 		rotate([0, 90, 0])cylinder(14, 9, 9);
 	}
-	
+}
+
+// Holder
+difference() {
+	translate([0, 0, 5])cylinder(30, 13, 13);
+	translate([0, 0, 5])cylinder(30, 10, 10);
 }
