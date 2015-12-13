@@ -22,6 +22,6 @@ difference() {
 
 // Holder
 difference() {
-	translate([0, 0, 5])cylinder(30, 13, 13);
-	translate([0, 0, 5])cylinder(30, 10, 10);
+	translate([0, 0, 5])cylinder(30, 17, 17);
+	translate([0, 0, 5])cylinder(30, 14, 14);
 }
