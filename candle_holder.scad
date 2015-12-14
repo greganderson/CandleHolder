@@ -7,12 +7,12 @@ difference() {
 // Handle
 difference() {
 	union() {
-		translate([-6, 47, 12]) {
-			rotate([0, 90, 0])cylinder(12, 12, 12);
+		translate([-4, 47, 12]) {
+			rotate([0, 90, 0])cylinder(8, 12, 12);
 		}
 
-		translate([-6, 30, 0]) {
-			cube([12, 29, 11]);
+		translate([-4, 30, 0]) {
+			cube([8, 29, 11]);
 		}
 	}
 	translate([-7, 47, 12]) {
