@@ -1,3 +1,12 @@
+//
+// Old fashioned candlestick holder
+//
+// https://www.google.com/search?q=candlestick+holder&chips=q:candlestick+holder,g_2:old+fashioned
+//
+// Bob Brown
+// github:edu-bob
+//
+
 $fn = 180;
 e=0.05;
 
