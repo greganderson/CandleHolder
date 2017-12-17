@@ -1,20 +1,20 @@
 $fn = 180;
 e=0.05;
 
-// base dimensions
-base_d1 = 70; // outer diameter of the base, lower
-base_d2 = 77; //outer diameter of the base, upper
-base_h = 6;  // thicknes of the base bottom
-rim_h = 12;   // total height of the rim above the base
-rim_t = 2;   // thickness of the rim =, must be <= rim_h
-base_r = 2; // rounding on the bottom
+// dimensions of the base
+base_d1 = 70;  // outer diameter of the base, lower
+base_d2 = 77;  //outer diameter of the base, upper
+base_h = 6;    // thickness of the base bottom
+rim_h = 12;    // total height of the rim above the base
+rim_t = 3;     // thickness of the rim, must be <= rim_h
+base_r = 2;    // rounding on the bottom
 
-// handle dimensions
+//  dimensions of the handle
 handle_id = 18;
 handle_t = 6;
 handle_od = handle_id+2*handle_t;
 
-// Candle holder dimensions
+// dimensions of the candle socket
 holder_d1 = 22;
 holder_d2 = 24.5;
 holder_t = 3;
@@ -26,35 +26,42 @@ intersection() {
 }
 
 module complete() {
-    // The base and the handle share a common diff
-    difference () {
-        union() {
-            base(0);
-            handle(0);
-        }
-        union() {
-            base(1);
-            handle(1);
+    // Multiple passes - even numbers are adds, odd are subtracts
+    for ( pass=[0:3] ) {
+        difference () {
+            union() {
+                base(pass*2);
+                handle(pass*2);
+                socket(pass*2);
+            }
+            union() {
+                base(pass*2+1);
+                handle(pass*2+1);
+                socket(pass*2+1);
+            }
         }
     }
-    base(2);
-    handle(2);
-    
-    // Candle Holder
+}
+
+module socket(phase=0) 
+{
+    // this has to be added after the base has been hollowed out
     translate([0,0,base_h-e]) {
-        difference() {
+        if ( phase == 2 ) {
             cylinder(d1=holder_d1+2*holder_t, d2=holder_d2+2*holder_t, h=holder_h);
+            translate([0,0,holder_h])
+              rotate_extrude()
+              translate([holder_d2/2+holder_t/2,0,0])
+              circle(d=holder_t);
+        } else if ( phase == 3 ) {
             cylinder(d1=holder_d1, d2=holder_d2, h=holder_h+e);
         }
-        translate([0,0,holder_h])
-        rotate_extrude()
-        translate([holder_d2/2+holder_t/2,0,0])
-        circle(d=holder_t);
     }
 }
 
 module base(phase = 0)
 {
+    // add in pass 1
     if ( phase==0 ) {
         // The very bottom is a straight cylinder, smaller that the base of the main cup
         // by the radius of the curvature
@@ -68,14 +75,15 @@ module base(phase = 0)
             translate([base_d2/2-rim_t/2,0,0])
             circle(d=rim_t);
         }
-    // subtract
+    // subtract in pass 1
     } else if ( phase==1 ) {
         // The inside of the cup
         translate([0, 0, base_h])
             cylinder(h=rim_h+e,d2=base_d2-2*rim_t,
             d1=base_d1+(base_h/(base_h+rim_h))*(base_d2-base_d1)-2*rim_t);
+    // add in pass 2
     } else if ( phase==2 ) {
-        // rounding on the bottom.  Not quite right because the think above it slopes outwards
+        // rounding on the bottom.  Not quite right because the thing above it slopes outwards
         rotate_extrude()
         translate([base_d1/2-base_r,base_r,0])
         circle(r=base_r);
